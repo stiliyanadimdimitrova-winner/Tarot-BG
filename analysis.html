@@ -6,86 +6,64 @@
 <title>Анализ · Bulgarian Mythology Tarot</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Cinzel:wght@500;600&display=swap');
-  :root{ --emerald-deep:#08221c; --emerald:#0e3d32; --gold:#c9a24b; --gold-bright:#e8caa0; --ink:#eee7d6; }
+  :root{ --emerald-deep:#08221c; --emerald:#0e3d32; --gold:#c9a24b; --ink:#3a2c14; --ink-soft:#7a6636; }
   *{box-sizing:border-box; margin:0; padding:0;}
   body{
     min-height:100vh; background:radial-gradient(circle at 50% 10%, var(--emerald) 0%, var(--emerald-deep) 60%, #051510 100%);
-    font-family:'Cormorant Garamond', Georgia, serif; color:var(--ink); padding:6vh 6vw 10vh;
+    font-family:'Cormorant Garamond', Georgia, serif; color:var(--ink); padding:4vh 3vw 8vh;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
   }
-  .wrap{max-width:720px; margin:0 auto;}
-  .page{
-    background: url('a4-template.png') center / cover no-repeat;
-    border-radius:6px; padding:5vh 6vw; margin-bottom:2rem; color:#3a2c14;
+
+  /* ---------- A4 лист: шаблонът е фон на ВСЕКИ лист ---------- */
+  .sheet{
+    position:relative; width:min(794px, 100%); aspect-ratio:210 / 297; margin:0 auto 2rem;
+    background:url('a4-template.png') center / 100% 100% no-repeat;   /* <- A4 шаблонът */
+    box-shadow:0 10px 40px rgba(0,0,0,.55); border-radius:2px; overflow:hidden;
+    container-type:inline-size;                                        /* размерите на текста растат/падат с листа */
   }
-  .title-page{text-align:center;}
-  .title-page img{max-width:100%; display:block; margin:0 auto 1.2rem;}
-  .bilingual-row{font-family:'Cinzel',serif; font-size:.85rem; letter-spacing:.06em; margin:.25rem 0;}
-  .bilingual-row .bg{color:#3a2c14;} .bilingual-row .en{color:#7a6636; font-size:.8em;}
-  h1{font-family:'Cinzel',serif; letter-spacing:.08em; font-size:clamp(1.6rem,4vw,2.4rem); color:var(--gold-bright); text-align:center; margin-bottom:4vh;}
-  section{border:1px solid var(--gold); border-radius:4px; padding:1.6rem 1.8rem; margin-bottom:2rem; background:rgba(8,34,28,.45);}
-  section h2{font-family:'Cinzel',serif; font-size:1rem; letter-spacing:.12em; color:var(--gold); margin-bottom:1rem;}
-  .card-name{font-size:1.6rem; color:var(--gold-bright);}
-  .card-sub{font-size:1rem; color:rgba(238,231,214,.7); margin-top:.3rem;}
-  .position{border-top:1px solid rgba(201,162,75,.25); padding:1rem 0;}
-  .position:first-of-type{border-top:none; padding-top:.2rem;}
-  .position h3{font-family:'Cinzel',serif; font-size:.85rem; letter-spacing:.08em; color:var(--gold);}
-  .position .pcard{font-size:1.15rem; color:var(--gold-bright); margin:.2rem 0 .4rem;}
-  .position p{font-size:.98rem; line-height:1.6;}
-  table{width:100%; border-collapse:collapse; margin-top:.5rem;}
-  th,td{text-align:left; padding:.5rem .6rem; border-bottom:1px solid rgba(201,162,75,.3); font-size:.95rem;}
-  th{color:var(--gold); font-weight:600; letter-spacing:.05em;}
-  .actions{text-align:center; margin-top:2rem;}
-  button{font-family:'Cinzel',serif; letter-spacing:.15em; font-size:.85rem; padding:.75rem 1.4rem; background:linear-gradient(180deg,var(--gold-bright),var(--gold)); color:var(--emerald-deep); border:none; border-radius:2px; cursor:pointer;}
+  .sheet .body{
+    position:absolute; inset:46% 13% 14% 13%;                          /* безопасна зона вътре в кремавото поле */
+    overflow:hidden; display:flex; flex-direction:column;
+    font-size:calc(var(--fs, 1) * 2.35cqw); line-height:1.5;
+  }
+  .sheet.center .body{ align-items:center; justify-content:center; text-align:center; }
+
+  .sheet h2{font-family:'Cinzel',serif; font-size:1.05em; letter-spacing:.14em; color:var(--ink-soft); text-align:center; margin-bottom:1.1em; }
+  .sheet h3{font-family:'Cinzel',serif; font-size:.85em; letter-spacing:.08em; color:var(--ink-soft); }
+  .sheet .big{font-size:1.9em; line-height:1.15; color:var(--ink); font-weight:600;}
+  .sheet .sub{font-size:1.05em; color:var(--ink-soft); margin-top:.3em;}
+  .sheet img.pic{display:block; margin:0 auto .8em; max-width:100%; height:auto; border-radius:3px; flex:0 1 auto; min-height:0; object-fit:contain;}
+  .row{font-family:'Cinzel',serif; font-size:.95em; letter-spacing:.06em; margin:.3em 0;}
+  .row .en{color:var(--ink-soft); font-size:.85em;}
+
+  .position{padding:.7em 0; border-top:1px solid rgba(122,102,54,.35); overflow:hidden;}
+  .position:first-of-type{border-top:none; padding-top:0;}
+  .position .pcard{font-size:1.2em; color:var(--ink); font-weight:600; margin:.1em 0 .3em;}
+  .position .pcard small{opacity:.65; font-weight:400; font-size:.75em;}
+  .position img.thumb{float:left; margin:.15em .8em .3em 0; border-radius:3px; max-width:38%; height:auto;}
+  .position p{font-size:.95em;}
+
+  .gtable{width:100%; border-collapse:collapse; margin-top:.4em;}
+  .gtable th,.gtable td{padding:.55em .4em; border-bottom:1px solid rgba(122,102,54,.4); text-align:left; font-size:.95em;}
+  .gtable th{font-family:'Cinzel',serif; color:var(--ink-soft); font-weight:600; letter-spacing:.04em;}
+
+  .actions{text-align:center; margin:1rem 0 0;}
+  button{font-family:'Cinzel',serif; letter-spacing:.15em; font-size:.85rem; padding:.8rem 1.5rem; background:linear-gradient(180deg,#e8caa0,#c9a24b); color:#08221c; border:none; border-radius:2px; cursor:pointer;}
+  .msg{max-width:720px; margin:2rem auto; text-align:center; color:#eee7d6;}
+
+  /* ---------- Печат / PDF: един A4 лист = една страница ---------- */
+  @page{ size:A4; margin:0; }
   @media print{
-    body{background:#fff; color:#222; padding:0;}
-    .wrap{background:url('a4-template.png') top center / contain no-repeat; padding:6vh 6vw;}
-    section{border-color:#999; background:none; color:#222;}
-    section h2{color:#7a6636;}
-    button{display:none;} .page{break-after:page;}
+    body{background:#fff; padding:0;}
+    .sheet{ width:210mm; height:297mm; aspect-ratio:auto; margin:0; box-shadow:none; border-radius:0; break-after:page; page-break-after:always; }
+    .actions{display:none;}
   }
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <!-- Заглавна страница: изображение (compas или качено от контролния панел) + двуезични данни -->
-  <div class="page title-page" id="title-page">
-    <img id="title-image" src="compas.png" alt="">
-    <div class="bilingual-row"><span class="bg" id="bi-dob-bg"></span> · <span class="en" id="bi-dob-en"></span></div>
-    <div class="bilingual-row"><span class="bg" id="bi-gender-bg"></span> · <span class="en" id="bi-gender-en"></span></div>
-    <div class="bilingual-row"><span class="bg" id="bi-element-bg"></span> · <span class="en" id="bi-element-en"></span></div>
-  </div>
-
-  <h1>Твоят анализ</h1>
-
-  <!-- 1. Зодия по елементи -->
-  <section id="zodiac-section">
-    <h2>ЗОДИЯ · ЕЛЕМЕНТ</h2>
-    <div class="card-name" id="zodiac-name">—</div>
-    <div class="card-sub" id="zodiac-sub"></div>
-  </section>
-
-  <!-- 2. Матрица на съдбата — 7 позиции (A·C·E·e2·G·I·x2 остават скрити) -->
-  <section id="matrix-section">
-    <h2>МАТРИЦА НА СЪДБАТА</h2>
-    <div id="matrix-positions">Зареждане…</div>
-  </section>
-
-  <!-- 3. Гуа / Благословени лични посоки -->
-  <section id="gua-section">
-    <h2>БЛАГОСЛОВЕНИ ЛИЧНИ ПОСОКИ</h2>
-    <table>
-      <tr><th>Успех</th><th>Подкрепа</th><th>Любов</th><th>Личен баланс</th></tr>
-      <tr>
-        <td id="gua-success">—</td><td id="gua-support">—</td><td id="gua-love">—</td><td id="gua-balance">—</td>
-      </tr>
-    </table>
-  </section>
-
-  <div class="actions">
-    <button onclick="window.print()">SAVE / PRINT PDF</button>
-  </div>
-</div>
+<div id="sheets"></div>
+<div class="actions"><button onclick="window.print()">SAVE / PRINT PDF</button></div>
 
 <script src="site-data-loader.js"></script>
 <script src="zodiac-algorithm.js"></script>
@@ -101,72 +79,113 @@
     I:  { bg:'Вътрешна сила',        en:'Inner Strength' },
     x2: { bg:'Идеална професия',     en:'Ideal Profession' },
   };
-  const ELEMENT_BG = {Fire:'Огън',Earth:'Земя',Air:'Въздух',Water:'Вода'};
+  const SIZE_W = {'1/2':'50%','1/3':'33%','1/4':'25%'};   // ширина спрямо листа
 
   const params = new URLSearchParams(window.location.search);
   const dobStr = params.get('dob');
   const gender = params.get('gender');
+  const host = document.getElementById('sheets');
+
+  function addSheet(inner, cls){
+    const s = document.createElement('div');
+    s.className = 'sheet' + (cls ? ' ' + cls : '');
+    s.innerHTML = '<div class="body">' + inner + '</div>';
+    host.appendChild(s);
+    return s;
+  }
+
+  /** Ако текстът не се събира в листа, го смалява стъпка по стъпка (никога не излиза извън A4). */
+  function fitAll(){
+    document.querySelectorAll('.sheet').forEach(sheet=>{
+      const body = sheet.querySelector('.body');
+      let scale = 1;
+      sheet.style.setProperty('--fs', scale);
+      while (body.scrollHeight > body.clientHeight + 1 && scale > 0.5) {
+        scale -= 0.04;
+        sheet.style.setProperty('--fs', scale.toFixed(2));
+      }
+    });
+  }
 
   (async () => {
-  await loadSiteData(); // взима site-data.json (експортиран от панела), после localStorage fallback
+    await loadSiteData();
 
-  if (!dobStr || !gender) {
-    document.querySelector('.wrap').innerHTML = '<p style="text-align:center">Липсват данни. Върни се и въведи дата и пол.</p>';
-  } else {
+    if (!dobStr || !gender) {
+      host.innerHTML = '<p class="msg">Липсват данни. Върни се и въведи дата и пол.</p>';
+      document.querySelector('.actions').style.display = 'none';
+      return;
+    }
     const [dd, mm, yyyy] = dobStr.split('/').map(Number);
 
-    // Заглавна страница: качено изображение от панела (ако има) + двуезични данни
-    const titleImg = cpGet('titleImage', null);
-    if (titleImg && titleImg.img) {
-      const img = document.getElementById('title-image');
-      img.src = titleImg.img;
-      const fr = {'1/2':'50%','1/3':'33%','1/4':'25%'}[titleImg.size] || '50%';
-      img.style.width = fr;
-    }
-    document.getElementById('bi-dob-bg').textContent = `ДАТА НА РАЖДАНЕ: ${dobStr}`;
-    document.getElementById('bi-dob-en').textContent = `DATE OF BIRTH: ${dobStr}`;
-    document.getElementById('bi-gender-bg').textContent = gender==='male' ? 'МЪЖ' : 'ЖЕНА';
-    document.getElementById('bi-gender-en').textContent = gender==='male' ? 'MALE' : 'FEMALE';
-
-    // 1. Зодия по елементи
+    // ----- Лист 1: заглавна страница (compas или качено изображение) + двуезични данни -----
     const zodiac = calculateZodiac(dd, mm, gender);
-    document.getElementById('zodiac-name').textContent = zodiac.court.nameBg + ' / ' + zodiac.court.nameEn;
-    document.getElementById('zodiac-sub').textContent = `${zodiac.element} · ${zodiac.sign}`;
-    document.getElementById('bi-element-bg').textContent = `ЕЛЕМЕНТ: ${zodiac.element}`;
-    document.getElementById('bi-element-en').textContent = `ELEMENT: ${zodiac.elementEn}`;
+    const titleImg = cpGet('titleImage', null);
+    const coverSrc = (titleImg && titleImg.img) ? titleImg.img : 'compas.png';
+    const coverW = SIZE_W[(titleImg && titleImg.size) || '1/2'] || '50%';
+    addSheet(`
+      <img class="pic" src="${coverSrc}" alt="" style="width:${coverW};">
+      <div class="row">ДАТА НА РАЖДАНЕ: ${dobStr} <span class="en">· DATE OF BIRTH: ${dobStr}</span></div>
+      <div class="row">${gender==='male' ? 'МЪЖ' : 'ЖЕНА'} <span class="en">· ${gender==='male' ? 'MALE' : 'FEMALE'}</span></div>
+      <div class="row">ЕЛЕМЕНТ: ${zodiac.element} <span class="en">· ELEMENT: ${zodiac.elementEn.toUpperCase()}</span></div>
+    `, 'center');
 
-    // 2. Матрица на съдбата — 7 позиции, всяка сочи собствена карта, четена от реалния анализ (JSON)
+    // ----- Лист 2: зодия по елементи (кралска карта + изображение и текст от галерията) -----
+    const gal = cpGet('gallery.' + zodiac.court.galleryKey, null) || {};
+    const galImg = gal.img ? `<img class="pic" src="${gal.img}" alt="" style="width:${SIZE_W[gal.size]||'50%'};">` : '';
+    addSheet(`
+      <h2>ЗОДИЯ · ЕЛЕМЕНТ</h2>
+      ${galImg}
+      <div class="big">${zodiac.court.nameBg}</div>
+      <div class="sub">${zodiac.court.nameEn} · ${zodiac.element}${zodiac.sign ? ' · ' + zodiac.sign : ''}</div>
+      ${gal.text ? `<div style="margin-top:1em; font-size:.95em;">${gal.text}</div>` : ''}
+    `, 'center');
+
+    // ----- Листове 3–6: матрица на съдбата (по 2 позиции на лист) -----
     const matrix = calculateDestinyMatrix(dobStr);
-    fetch('arcana-analysis.json').then(r=>r.json()).then(cards=>{
+    let cards = null;
+    try {
+      cards = await fetch('arcana-analysis.json').then(r => { if(!r.ok) throw new Error(r.status); return r.json(); });
+    } catch (e) {
+      addSheet('<h2>МАТРИЦА НА СЪДБАТА</h2><p>Не успях да заредя данните на анализа (arcana-analysis.json). '
+        + 'Ако отваряш файла с двоен клик (адрес, започващ с file://), браузърът го блокира. Отвори сайта през линка от GitHub Pages.</p>');
+    }
+    if (cards) {
       const order = ['A','C','E','e2','G','I','x2'];
-      const html = order.map(pos=>{
-        const num = matrix[pos];                 // 1–22, вече редуцирано
-        const docNum = String(num);
-        const card = cards[docNum];
-        const localName = MAJOR_ARCANA[num===22?0:num];
-        const text = card[gender][pos];
+      const blocks = order.map(pos=>{
+        const num = matrix[pos];                       // 1–22
+        const idx = num === 22 ? 0 : num;
+        const card = cards[String(num)];
+        const local = MAJOR_ARCANA[idx];
         const label = POSITION_LABELS[pos];
+        const art = cpGet('arcana.' + idx, null) || {};
+        const thumb = art.img ? `<img class="thumb" src="${art.img}" alt="" style="width:${SIZE_W[art.size]||'33%'};">` : '';
         return `<div class="position">
           <h3>${label.bg.toUpperCase()} / ${label.en.toUpperCase()}</h3>
-          <div class="pcard">${localName.roman}. ${localName.local} <span style="opacity:.6;font-size:.8em">(${card.nameBg})</span></div>
-          <p>${text.bg}</p>
+          <div class="pcard">${local.roman}. ${local.local} <small>(${card.nameBg})</small></div>
+          ${thumb}<p>${card[gender][pos].bg}</p>
         </div>`;
-      }).join('');
-      document.getElementById('matrix-positions').innerHTML = html;
-    }).catch(err=>{
-      document.getElementById('matrix-positions').innerHTML =
-        '<p style="color:#e8a; font-size:.9rem;">Не успях да заредя данните на анализа (arcana-analysis.json). '
-        + 'Ако отваряш файла директно (двоен клик, адрес започващ с file://), браузърът блокира това зареждане. '
-        + 'Пусни сайта през локален сървър или го качи на GitHub Pages, за да проработи.</p>';
-    });
+      });
+      for (let i = 0; i < blocks.length; i += 2) {
+        addSheet('<h2>МАТРИЦА НА СЪДБАТА</h2>' + blocks.slice(i, i + 2).join(''));
+      }
+    }
 
-    // 3. Гуа → само положителните посоки, без самото число
-    const directions = calculateBlessedDirections(yyyy, gender);
-    document.getElementById('gua-success').textContent = directions.success;
-    document.getElementById('gua-support').textContent = directions.support;
-    document.getElementById('gua-love').textContent = directions.love;
-    document.getElementById('gua-balance').textContent = directions.balance;
-  }
+    // ----- Последен лист: Гуа → само положителните посоки, без самото число -----
+    const d = calculateBlessedDirections(yyyy, gender);
+    addSheet(`
+      <h2>БЛАГОСЛОВЕНИ ЛИЧНИ ПОСОКИ</h2>
+      <table class="gtable">
+        <tr><th>Успех</th><th>Подкрепа</th><th>Любов</th><th>Личен баланс</th></tr>
+        <tr><td>${d.success}</td><td>${d.support}</td><td>${d.love}</td><td>${d.balance}</td></tr>
+      </table>
+    `);
+
+    // оразмеряване след като шрифтове и снимки са готови
+    fitAll();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
+    window.addEventListener('load', fitAll);
+    document.querySelectorAll('.sheet img').forEach(im => { if(!im.complete) im.addEventListener('load', fitAll); });
+    window.addEventListener('resize', fitAll);
   })();
 </script>
 </body>

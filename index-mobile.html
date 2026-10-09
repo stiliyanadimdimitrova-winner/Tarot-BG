@@ -33,7 +33,7 @@
   .overlay .panel{max-width:640px; font-size:1.05rem; line-height:1.7; color:var(--ink); text-align:left;}
   form{margin-top:4vh; display:flex; flex-direction:column; gap:1.3rem; width:94vw;}
   label{font-size:.8rem; letter-spacing:.12em; color:var(--gold);}
-  input,select{background:rgba(244,236,216,.06); border:1px solid var(--gold); color:var(--ink); font-family:inherit; font-size:16px; padding:.85rem .8rem; border-radius:2px;}
+  input,select{color-scheme:dark; background:rgba(244,236,216,.06); border:1px solid var(--gold); color:var(--ink); font-family:inherit; font-size:16px; padding:.85rem .8rem; border-radius:2px;}
   button{margin-top:.6rem; font-family:'Cinzel',serif; letter-spacing:.12em; font-size:1rem; padding:1.05rem; background:linear-gradient(180deg,var(--gold-bright),var(--gold)); color:var(--emerald-deep); border:none; border-radius:2px; cursor:pointer;}
   button:hover{filter:brightness(1.08);}
 </style>
@@ -52,7 +52,7 @@
   <form onsubmit="return spinData(event)">
     <div>
       <label for="dob">DATE OF BIRTH · DD/MM/YYYY</label>
-      <input id="dob" type="text" placeholder="DD/MM/YYYY" pattern="\d{2}/\d{2}/\d{4}" required>
+      <input id="dob" type="date" min="1900-01-01" required>
     </div>
     <div>
       <label for="gender">MALE / FEMALE</label>
@@ -81,6 +81,7 @@
   // Настройките идват от site-data.json (експортиран от контролния панел),
   // с fallback към localStorage при директен преглед от самия панел.
   window.addEventListener('DOMContentLoaded', async ()=>{
+    document.getElementById('dob').max = new Date().toISOString().slice(0,10);
     await loadSiteData();
     const introHtml = cpGet('introHtml', null);
     if(introHtml) document.getElementById('intro-text').innerHTML = introHtml;
@@ -101,7 +102,9 @@
   }
   function spinData(e){
     e.preventDefault();
-    const dob = document.getElementById('dob').value;
+    const iso = document.getElementById('dob').value; // YYYY-MM-DD от календара
+    const [y, m, d] = iso.split('-');
+    const dob = `${d}/${m}/${y}`;                 // DD/MM/YYYY за алгоритмите
     const gender = document.getElementById('gender').value;
     const params = new URLSearchParams({dob, gender});
     window.location.href = 'analysis.html?' + params.toString();
