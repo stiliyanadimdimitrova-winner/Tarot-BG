@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bulgarian Mythology Tarot · Tablet</title>
+<style>
+  :root{
+    --emerald-deep:#08221c; --emerald:#0e3d32; --gold:#c9a24b; --gold-bright:#e8caa0;
+    --cream:#f4ecd8; --ink:#eee7d6;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      linear-gradient(rgba(4,15,12,.35), rgba(4,15,12,.55)),
+      url('hero-bg.png') center bottom / cover no-repeat fixed,
+      radial-gradient(circle at 50% 20%, var(--emerald) 0%, var(--emerald-deep) 65%, #051510 100%);
+    font-family:'Cormorant Garamond', Georgia, serif; color:var(--ink); overflow-x:hidden;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Cinzel:wght@500;600&display=swap');
+  .stage{position:relative; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:6vh 6vw 8vh;}
+  h1{font-family:'Cinzel', serif; letter-spacing:.08em; font-size:clamp(2rem,6vw,3.4rem); color:var(--gold-bright); text-align:center;}
+  .sub{margin-top:.6rem; font-size:clamp(.85rem,2vw,1.15rem); letter-spacing:.15em; color:var(--gold); text-align:center;}
+  .water{position:relative; width:min(560px,70vw); height:32vh; margin-top:6vh;}
+  #hologram-slot{position:absolute; inset:8% 15%; display:flex; align-items:center; justify-content:center; cursor:pointer;}
+  #hologram-slot .placeholder{color:rgba(200,220,210,.35); font-size:.85rem; letter-spacing:.1em; text-align:center;}
+  .toggle-label{position:fixed; font-family:'Cinzel',serif; font-size:.8rem; letter-spacing:.2em; color:var(--gold); cursor:pointer; padding:.4rem .9rem; border:1px solid var(--gold); border-radius:2px; background:rgba(8,34,28,.6); z-index:5;}
+  #intro-toggle{bottom:1.2rem; left:1.2rem;}
+  #gdpr-toggle{bottom:1.2rem; right:1.2rem;}
+  .overlay{position:fixed; inset:0; background:rgba(4,15,12,.92); display:none; align-items:center; justify-content:center; padding:8vw; z-index:10;}
+  .overlay.open{display:flex;}
+  .overlay .panel{max-width:640px; font-size:1.05rem; line-height:1.7; color:var(--ink); text-align:left;}
+  form{margin-top:5vh; display:flex; flex-direction:column; gap:1.2rem; width:min(420px,60vw);}
+  label{font-size:.8rem; letter-spacing:.12em; color:var(--gold);}
+  input,select{background:rgba(244,236,216,.06); border:1px solid var(--gold); color:var(--ink); font-family:inherit; font-size:1.05rem; padding:.7rem .8rem; border-radius:2px;}
+  button{margin-top:.6rem; font-family:'Cinzel',serif; letter-spacing:.15em; font-size:.95rem; padding:.85rem; background:linear-gradient(180deg,var(--gold-bright),var(--gold)); color:var(--emerald-deep); border:none; border-radius:2px; cursor:pointer;}
+  button:hover{filter:brightness(1.08);}
+</style>
+</head>
+<body>
+<div class="stage">
+  <a href="arcana-gallery.html" style="text-decoration:none;"><h1>Bulgarian Mythology Tarot</h1></a>
+  <div class="sub">ASTRO · TAROT · DESTINY MATRIX · FENG SHUI</div>
+
+  <div class="water">
+    <div id="hologram-slot" onclick="toggleHologram()">
+      <div class="placeholder" id="holo-placeholder">Тук ще се появи холограмата<br>(добавя се от контролния панел)</div>
+    </div>
+  </div>
+
+  <form onsubmit="return spinData(event)">
+    <div>
+      <label for="dob">DATE OF BIRTH · DD/MM/YYYY</label>
+      <input id="dob" type="text" placeholder="DD/MM/YYYY" pattern="\d{2}/\d{2}/\d{4}" required>
+    </div>
+    <div>
+      <label for="gender">MALE / FEMALE</label>
+      <select id="gender" required>
+        <option value="" disabled selected>Избери / Select</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+    </div>
+    <button type="submit">SPIN DATA</button>
+  </form>
+</div>
+
+<div class="toggle-label" id="intro-toggle" onclick="openOverlay('intro')">INTRO</div>
+<div class="toggle-label" id="gdpr-toggle" onclick="openOverlay('gdpr')">GDPR</div>
+
+<div class="overlay" id="overlay-intro" onclick="this.classList.remove('open')">
+  <div class="panel" id="intro-text">Текстът за INTRO ще се зарежда от контролния панел.</div>
+</div>
+<div class="overlay" id="overlay-gdpr" onclick="this.classList.remove('open')">
+  <div class="panel" id="gdpr-text">Текстът за GDPR ще се зарежда от контролния панел.</div>
+</div>
+
+<script src="site-data-loader.js"></script>
+<script>
+  // Настройките идват от site-data.json (експортиран от контролния панел),
+  // с fallback към localStorage при директен преглед от самия панел.
+  window.addEventListener('DOMContentLoaded', async ()=>{
+    await loadSiteData();
+    const introHtml = cpGet('introHtml', null);
+    if(introHtml) document.getElementById('intro-text').innerHTML = introHtml;
+    const gdprHtml = cpGet('gdprHtml', null);
+    if(gdprHtml) document.getElementById('gdpr-text').innerHTML = gdprHtml;
+
+    const link = cpGet('hologramLink', '');
+    if(link){
+      const slot = document.getElementById('hologram-slot');
+      slot.innerHTML = `<iframe src="${link}" style="width:100%;height:100%;border:0;pointer-events:none;" allow="autoplay"></iframe>`;
+    }
+  });
+
+  function openOverlay(which){ document.getElementById('overlay-'+which).classList.add('open'); }
+  function toggleHologram(){
+    const link = cpGet('hologramLink', '');
+    if(!link) alert('Мястото е готово за холограмата — добави линк в контролния панел.');
+  }
+  function spinData(e){
+    e.preventDefault();
+    const dob = document.getElementById('dob').value;
+    const gender = document.getElementById('gender').value;
+    const params = new URLSearchParams({dob, gender});
+    window.location.href = 'analysis.html?' + params.toString();
+    return false;
+  }
+</script>
+</body>
+</html>

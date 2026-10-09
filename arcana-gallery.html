@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>78-те Аркана · Bulgarian Mythology Tarot</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Cinzel:wght@500;600&display=swap');
+  :root{ --emerald-deep:#08221c; --emerald:#0e3d32; --gold:#c9a24b; --gold-bright:#e8caa0; --ink:#eee7d6; }
+  *{box-sizing:border-box;}
+  body{margin:0; min-height:100vh; background:radial-gradient(circle at 50% 10%, var(--emerald) 0%, var(--emerald-deep) 60%, #051510 100%);
+    font-family:'Cormorant Garamond',Georgia,serif; color:var(--ink); padding:5vh 5vw;}
+  a.back{color:var(--gold); font-size:.85rem; letter-spacing:.08em;}
+  h1{font-family:'Cinzel',serif; letter-spacing:.08em; color:var(--gold-bright); text-align:center; margin:1.5rem 0 3rem;}
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:1.2rem; max-width:1200px; margin:0 auto;}
+  .card{border:1px solid var(--gold); border-radius:4px; padding:.6rem; text-align:center; background:rgba(8,34,28,.4);}
+  .card img{max-width:100%; border-radius:2px; margin-bottom:.4rem;}
+  .card .empty{height:140px; display:flex; align-items:center; justify-content:center; color:rgba(238,231,214,.3); font-size:.75rem;}
+  .card .label{font-size:.75rem; color:var(--gold);}
+  .card .txt{font-size:.7rem; color:rgba(238,231,214,.6); margin-top:.3rem; max-height:4.5em; overflow:hidden;}
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← НАЗАД</a>
+<h1>78-те Аркана</h1>
+<div class="grid" id="grid"></div>
+
+<script src="site-data-loader.js"></script>
+<script>
+  (async () => {
+    await loadSiteData();
+    const grid = document.getElementById('grid');
+    let html = '';
+    for(let i=1;i<=78;i++){
+      const d = cpGet('card78.'+i, {img:'',text:''});
+      html += `<div class="card">
+        ${d.img ? `<img src="${d.img}">` : `<div class="empty">Карта ${i}</div>`}
+        <div class="label">Карта ${i}</div>
+        ${d.text ? `<div class="txt">${d.text}</div>` : ''}
+      </div>`;
+    }
+    grid.innerHTML = html;
+  })();
+</script>
+</body>
+</html>

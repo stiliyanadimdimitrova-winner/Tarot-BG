@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Анализ · Bulgarian Mythology Tarot</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Cinzel:wght@500;600&display=swap');
+  :root{ --emerald-deep:#08221c; --emerald:#0e3d32; --gold:#c9a24b; --gold-bright:#e8caa0; --ink:#eee7d6; }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    min-height:100vh; background:radial-gradient(circle at 50% 10%, var(--emerald) 0%, var(--emerald-deep) 60%, #051510 100%);
+    font-family:'Cormorant Garamond', Georgia, serif; color:var(--ink); padding:6vh 6vw 10vh;
+  }
+  .wrap{max-width:720px; margin:0 auto;}
+  .page{
+    background: url('a4-template.png') center / cover no-repeat;
+    border-radius:6px; padding:5vh 6vw; margin-bottom:2rem; color:#3a2c14;
+  }
+  .title-page{text-align:center;}
+  .title-page img{max-width:100%; display:block; margin:0 auto 1.2rem;}
+  .bilingual-row{font-family:'Cinzel',serif; font-size:.85rem; letter-spacing:.06em; margin:.25rem 0;}
+  .bilingual-row .bg{color:#3a2c14;} .bilingual-row .en{color:#7a6636; font-size:.8em;}
+  h1{font-family:'Cinzel',serif; letter-spacing:.08em; font-size:clamp(1.6rem,4vw,2.4rem); color:var(--gold-bright); text-align:center; margin-bottom:4vh;}
+  section{border:1px solid var(--gold); border-radius:4px; padding:1.6rem 1.8rem; margin-bottom:2rem; background:rgba(8,34,28,.45);}
+  section h2{font-family:'Cinzel',serif; font-size:1rem; letter-spacing:.12em; color:var(--gold); margin-bottom:1rem;}
+  .card-name{font-size:1.6rem; color:var(--gold-bright);}
+  .card-sub{font-size:1rem; color:rgba(238,231,214,.7); margin-top:.3rem;}
+  .position{border-top:1px solid rgba(201,162,75,.25); padding:1rem 0;}
+  .position:first-of-type{border-top:none; padding-top:.2rem;}
+  .position h3{font-family:'Cinzel',serif; font-size:.85rem; letter-spacing:.08em; color:var(--gold);}
+  .position .pcard{font-size:1.15rem; color:var(--gold-bright); margin:.2rem 0 .4rem;}
+  .position p{font-size:.98rem; line-height:1.6;}
+  table{width:100%; border-collapse:collapse; margin-top:.5rem;}
+  th,td{text-align:left; padding:.5rem .6rem; border-bottom:1px solid rgba(201,162,75,.3); font-size:.95rem;}
+  th{color:var(--gold); font-weight:600; letter-spacing:.05em;}
+  .actions{text-align:center; margin-top:2rem;}
+  button{font-family:'Cinzel',serif; letter-spacing:.15em; font-size:.85rem; padding:.75rem 1.4rem; background:linear-gradient(180deg,var(--gold-bright),var(--gold)); color:var(--emerald-deep); border:none; border-radius:2px; cursor:pointer;}
+  @media print{
+    body{background:#fff; color:#222; padding:0;}
+    .wrap{background:url('a4-template.png') top center / contain no-repeat; padding:6vh 6vw;}
+    section{border-color:#999; background:none; color:#222;}
+    section h2{color:#7a6636;}
+    button{display:none;} .page{break-after:page;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Заглавна страница: изображение (compas или качено от контролния панел) + двуезични данни -->
+  <div class="page title-page" id="title-page">
+    <img id="title-image" src="compas.png" alt="">
+    <div class="bilingual-row"><span class="bg" id="bi-dob-bg"></span> · <span class="en" id="bi-dob-en"></span></div>
+    <div class="bilingual-row"><span class="bg" id="bi-gender-bg"></span> · <span class="en" id="bi-gender-en"></span></div>
+    <div class="bilingual-row"><span class="bg" id="bi-element-bg"></span> · <span class="en" id="bi-element-en"></span></div>
+  </div>
+
+  <h1>Твоят анализ</h1>
+
+  <!-- 1. Зодия по елементи -->
+  <section id="zodiac-section">
+    <h2>ЗОДИЯ · ЕЛЕМЕНТ</h2>
+    <div class="card-name" id="zodiac-name">—</div>
+    <div class="card-sub" id="zodiac-sub"></div>
+  </section>
+
+  <!-- 2. Матрица на съдбата — 7 позиции (A·C·E·e2·G·I·x2 остават скрити) -->
+  <section id="matrix-section">
+    <h2>МАТРИЦА НА СЪДБАТА</h2>
+    <div id="matrix-positions">Зареждане…</div>
+  </section>
+
+  <!-- 3. Гуа / Благословени лични посоки -->
+  <section id="gua-section">
+    <h2>БЛАГОСЛОВЕНИ ЛИЧНИ ПОСОКИ</h2>
+    <table>
+      <tr><th>Успех</th><th>Подкрепа</th><th>Любов</th><th>Личен баланс</th></tr>
+      <tr>
+        <td id="gua-success">—</td><td id="gua-support">—</td><td id="gua-love">—</td><td id="gua-balance">—</td>
+      </tr>
+    </table>
+  </section>
+
+  <div class="actions">
+    <button onclick="window.print()">SAVE / PRINT PDF</button>
+  </div>
+</div>
+
+<script src="site-data-loader.js"></script>
+<script src="zodiac-algorithm.js"></script>
+<script src="destiny-matrix.js"></script>
+<script src="gua-calculator.js"></script>
+<script>
+  const POSITION_LABELS = {
+    A:  { bg:'Визитка',              en:'Image' },
+    C:  { bg:'Талант',               en:'Talent' },
+    E:  { bg:'Материална карма',     en:'Material Karma' },
+    e2: { bg:'Блокаж на парите',     en:'Money Block' },
+    G:  { bg:'Карма от предишен живот', en:'Past-Life Karma' },
+    I:  { bg:'Вътрешна сила',        en:'Inner Strength' },
+    x2: { bg:'Идеална професия',     en:'Ideal Profession' },
+  };
+  const ELEMENT_BG = {Fire:'Огън',Earth:'Земя',Air:'Въздух',Water:'Вода'};
+
+  const params = new URLSearchParams(window.location.search);
+  const dobStr = params.get('dob');
+  const gender = params.get('gender');
+
+  (async () => {
+  await loadSiteData(); // взима site-data.json (експортиран от панела), после localStorage fallback
+
+  if (!dobStr || !gender) {
+    document.querySelector('.wrap').innerHTML = '<p style="text-align:center">Липсват данни. Върни се и въведи дата и пол.</p>';
+  } else {
+    const [dd, mm, yyyy] = dobStr.split('/').map(Number);
+
+    // Заглавна страница: качено изображение от панела (ако има) + двуезични данни
+    const titleImg = cpGet('titleImage', null);
+    if (titleImg && titleImg.img) {
+      const img = document.getElementById('title-image');
+      img.src = titleImg.img;
+      const fr = {'1/2':'50%','1/3':'33%','1/4':'25%'}[titleImg.size] || '50%';
+      img.style.width = fr;
+    }
+    document.getElementById('bi-dob-bg').textContent = `ДАТА НА РАЖДАНЕ: ${dobStr}`;
+    document.getElementById('bi-dob-en').textContent = `DATE OF BIRTH: ${dobStr}`;
+    document.getElementById('bi-gender-bg').textContent = gender==='male' ? 'МЪЖ' : 'ЖЕНА';
+    document.getElementById('bi-gender-en').textContent = gender==='male' ? 'MALE' : 'FEMALE';
+
+    // 1. Зодия по елементи
+    const zodiac = calculateZodiac(dd, mm, gender);
+    document.getElementById('zodiac-name').textContent = zodiac.court.nameBg + ' / ' + zodiac.court.nameEn;
+    document.getElementById('zodiac-sub').textContent = `${zodiac.element} · ${zodiac.sign}`;
+    document.getElementById('bi-element-bg').textContent = `ЕЛЕМЕНТ: ${zodiac.element}`;
+    document.getElementById('bi-element-en').textContent = `ELEMENT: ${zodiac.elementEn}`;
+
+    // 2. Матрица на съдбата — 7 позиции, всяка сочи собствена карта, четена от реалния анализ (JSON)
+    const matrix = calculateDestinyMatrix(dobStr);
+    fetch('arcana-analysis.json').then(r=>r.json()).then(cards=>{
+      const order = ['A','C','E','e2','G','I','x2'];
+      const html = order.map(pos=>{
+        const num = matrix[pos];                 // 1–22, вече редуцирано
+        const docNum = String(num);
+        const card = cards[docNum];
+        const localName = MAJOR_ARCANA[num===22?0:num];
+        const text = card[gender][pos];
+        const label = POSITION_LABELS[pos];
+        return `<div class="position">
+          <h3>${label.bg.toUpperCase()} / ${label.en.toUpperCase()}</h3>
+          <div class="pcard">${localName.roman}. ${localName.local} <span style="opacity:.6;font-size:.8em">(${card.nameBg})</span></div>
+          <p>${text.bg}</p>
+        </div>`;
+      }).join('');
+      document.getElementById('matrix-positions').innerHTML = html;
+    }).catch(err=>{
+      document.getElementById('matrix-positions').innerHTML =
+        '<p style="color:#e8a; font-size:.9rem;">Не успях да заредя данните на анализа (arcana-analysis.json). '
+        + 'Ако отваряш файла директно (двоен клик, адрес започващ с file://), браузърът блокира това зареждане. '
+        + 'Пусни сайта през локален сървър или го качи на GitHub Pages, за да проработи.</p>';
+    });
+
+    // 3. Гуа → само положителните посоки, без самото число
+    const directions = calculateBlessedDirections(yyyy, gender);
+    document.getElementById('gua-success').textContent = directions.success;
+    document.getElementById('gua-support').textContent = directions.support;
+    document.getElementById('gua-love').textContent = directions.love;
+    document.getElementById('gua-balance').textContent = directions.balance;
+  }
+  })();
+</script>
+</body>
+</html>
